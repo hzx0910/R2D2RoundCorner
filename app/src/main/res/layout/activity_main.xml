@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <make.more.r2d2.round_corner.RoundText
+        style="@style/base_button"
+        android:layout_height="120dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:round_bg="@mipmap/android"
+        app:round_bg_tint="@color/stroke_stateful"
+        app:round_bg_tint_mode="add"
+        app:round_radius="60dp"
+        app:round_radius_top_right="30dp"
+        app:round_stroke_color="@color/stroke_stateful"
+        app:round_stroke_width="2dp" />
+
+    <TextView
+        style="@style/base_button"
+        android:background="@drawable/bg_gradient"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Hello World!" />
+
+    <make.more.r2d2.round_corner.RoundText
+        style="@style/base_button"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Hello World!"
+        app:round_bg="@drawable/bg_gradient"
+        app:round_radius="15dp"
+        app:round_stroke_color="@color/colorAccent"
+        app:round_stroke_width="2dp" />
+
+    <make.more.r2d2.round_corner.RoundLinear
+        style="@style/base_button"
+        android:addStatesFromChildren="true"
+        app:round_bg="@drawable/bg_gradient"
+        app:round_radius="15dp"
+        app:round_stroke_color="@color/stroke_stateful"
+        app:round_stroke_width="2dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Hello World!" />
+
+    </make.more.r2d2.round_corner.RoundLinear>
+
+    <make.more.r2d2.round_corner.RoundLinear
+        style="@style/base_button"
+        android:enabled="true"
+        app:round_bg="@drawable/bg_gradient"
+        app:round_radius="15dp"
+        app:round_radius_bottom_left="6dp"
+        app:round_radius_top_right="6dp"
+        app:round_stroke_color="@color/colorAccent"
+        app:round_stroke_width="2dp" />
+
+    <make.more.r2d2.round_corner.RoundLinear
+        style="@style/base_button"
+        android:enabled="false"
+        app:round_bg="@drawable/bg_gradient"
+        app:round_radius="15dp"
+        app:round_radius_bottom_left="6dp"
+        app:round_radius_top_right="6dp"
+        app:round_stroke_color="@color/colorAccent"
+        app:round_stroke_width="2dp" />
+
+    <make.more.r2d2.round_corner.RoundLinear
+        style="@style/base_button"
+        app:round_bg="#99F"
+        app:round_radius="15dp"
+        app:round_radius_left="6dp"
+        app:round_stroke_color="@color/colorAccent"
+        app:round_stroke_width="2dp" />
+
+    <make.more.r2d2.round_corner.RoundLinear
+        style="@style/base_button"
+        app:round_bg="#99F"
+        app:round_radius_top="6dp"
+        app:round_stroke_color="@color/colorAccent"
+        app:round_stroke_width="2dp" />
+</LinearLayout>

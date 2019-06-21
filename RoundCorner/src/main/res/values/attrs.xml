@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 可圆角背景 -->
+    <attr name="round_bg" format="reference|color" />
+    <!-- 可圆角背景Tint -->
+    <attr name="round_bg_tint" format="color" />
+    <!-- 可圆角背景Tint模式 -->
+    <attr name="round_bg_tint_mode">
+        <!-- The tint is drawn on top of the drawable.
+             [Sa + (1 - Sa)*Da, Rc = Sc + (1 - Sa)*Dc] -->
+        <enum name="src_over" value="3" />
+        <!-- The tint is masked by the alpha channel of the drawable. The drawable’s
+             color channels are thrown out. [Sa * Da, Sc * Da] -->
+        <enum name="src_in" value="5" />
+        <!-- The tint is drawn above the drawable, but with the drawable’s alpha
+             channel masking the result. [Da, Sc * Da + (1 - Sa) * Dc] -->
+        <enum name="src_atop" value="9" />
+        <!-- Multiplies the color and alpha channels of the drawable with those of
+             the tint. [Sa * Da, Sc * Dc] -->
+        <enum name="multiply" value="14" />
+        <!-- [Sa + Da - Sa * Da, Sc + Dc - Sc * Dc] -->
+        <enum name="screen" value="15" />
+        <!-- Combines the tint and drawable color and alpha cha¬nnels, clamping the
+             result to valid color values. Saturate(S + D) -->
+        <enum name="add" value="16" />
+    </attr>
+    <!-- 圆角背景半径 -->
+    <attr name="round_radius" format="dimension" />
+    <attr name="round_radius_left" format="dimension" />
+    <attr name="round_radius_right" format="dimension" />
+    <attr name="round_radius_top" format="dimension" />
+    <attr name="round_radius_bottom" format="dimension" />
+    <attr name="round_radius_top_left" format="dimension" />
+    <attr name="round_radius_top_right" format="dimension" />
+    <attr name="round_radius_bottom_left" format="dimension" />
+    <attr name="round_radius_bottom_right" format="dimension" />
+    <!-- 边框宽度 -->
+    <attr name="round_stroke_width" format="dimension" />
+    <!-- 边框颜色 -->
+    <attr name="round_stroke_color" format="color" />
+
+    <!--可读取的属性-->
+    <declare-styleable name="RoundLayout">
+        <attr name="round_bg" />
+        <attr name="round_bg_tint" />
+        <attr name="round_bg_tint_mode" />
+        <attr name="round_radius" />
+        <attr name="round_radius_left" />
+        <attr name="round_radius_right" />
+        <attr name="round_radius_top" />
+        <attr name="round_radius_bottom" />
+        <attr name="round_radius_top_left" />
+        <attr name="round_radius_top_right" />
+        <attr name="round_radius_bottom_left" />
+        <attr name="round_radius_bottom_right" />
+        <attr name="round_stroke_width" />
+        <attr name="round_stroke_color" />
+    </declare-styleable>
+
+    <!--可提示的属性-->
+    <declare-styleable name="RoundLinear">
+        <attr name="round_bg" />
+        <attr name="round_bg_tint" />
+        <attr name="round_bg_tint_mode" />
+        <attr name="round_radius" />
+        <attr name="round_radius_left" />
+        <attr name="round_radius_right" />
+        <attr name="round_radius_top" />
+        <attr name="round_radius_bottom" />
+        <attr name="round_radius_top_left" />
+        <attr name="round_radius_top_right" />
+        <attr name="round_radius_bottom_left" />
+        <attr name="round_radius_bottom_right" />
+        <attr name="round_stroke_width" />
+        <attr name="round_stroke_color" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundText">
+        <attr name="round_bg" />
+        <attr name="round_bg_tint" />
+        <attr name="round_bg_tint_mode" />
+        <attr name="round_radius" />
+        <attr name="round_radius_left" />
+        <attr name="round_radius_right" />
+        <attr name="round_radius_top" />
+        <attr name="round_radius_bottom" />
+        <attr name="round_radius_top_left" />
+        <attr name="round_radius_top_right" />
+        <attr name="round_radius_bottom_left" />
+        <attr name="round_radius_bottom_right" />
+        <attr name="round_stroke_width" />
+        <attr name="round_stroke_color" />
+    </declare-styleable>
+</resources>
