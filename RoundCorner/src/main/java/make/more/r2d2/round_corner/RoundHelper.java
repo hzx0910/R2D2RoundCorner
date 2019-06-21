@@ -149,8 +149,8 @@ public class RoundHelper {
     private void clipUnder18(Canvas canvas) {
         float topLeft = radii[0];
         float topRight = radii[2];
-        float bottomLeft = radii[4];
-        float bottomRight = radii[6];
+        float bottomRight = radii[4];
+        float bottomLeft = radii[6];
 
         Path path = new Path();
         if (topLeft > 0) {
