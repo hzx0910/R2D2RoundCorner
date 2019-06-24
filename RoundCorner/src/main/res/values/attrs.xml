@@ -39,7 +39,7 @@
     <!-- 边框颜色 -->
     <attr name="round_stroke_color" format="color" />
 
-    <!--可读取的属性-->
+    <!--用来读取的属性-->
     <declare-styleable name="RoundLayout">
         <attr name="round_bg" />
         <attr name="round_bg_tint" />
@@ -57,7 +57,7 @@
         <attr name="round_stroke_color" />
     </declare-styleable>
 
-    <!--可提示的属性-->
+    <!--用来提示的属性-->
     <declare-styleable name="RoundLinear">
         <attr name="round_bg" />
         <attr name="round_bg_tint" />
@@ -75,7 +75,62 @@
         <attr name="round_stroke_color" />
     </declare-styleable>
 
+    <!--用来提示的属性-->
+    <declare-styleable name="RoundRelative">
+        <attr name="round_bg" />
+        <attr name="round_bg_tint" />
+        <attr name="round_bg_tint_mode" />
+        <attr name="round_radius" />
+        <attr name="round_radius_left" />
+        <attr name="round_radius_right" />
+        <attr name="round_radius_top" />
+        <attr name="round_radius_bottom" />
+        <attr name="round_radius_top_left" />
+        <attr name="round_radius_top_right" />
+        <attr name="round_radius_bottom_left" />
+        <attr name="round_radius_bottom_right" />
+        <attr name="round_stroke_width" />
+        <attr name="round_stroke_color" />
+    </declare-styleable>
+
+    <!--用来提示的属性-->
+    <declare-styleable name="RoundFrame">
+        <attr name="round_bg" />
+        <attr name="round_bg_tint" />
+        <attr name="round_bg_tint_mode" />
+        <attr name="round_radius" />
+        <attr name="round_radius_left" />
+        <attr name="round_radius_right" />
+        <attr name="round_radius_top" />
+        <attr name="round_radius_bottom" />
+        <attr name="round_radius_top_left" />
+        <attr name="round_radius_top_right" />
+        <attr name="round_radius_bottom_left" />
+        <attr name="round_radius_bottom_right" />
+        <attr name="round_stroke_width" />
+        <attr name="round_stroke_color" />
+    </declare-styleable>
+
+    <!--用来提示的属性-->
     <declare-styleable name="RoundText">
+        <attr name="round_bg" />
+        <attr name="round_bg_tint" />
+        <attr name="round_bg_tint_mode" />
+        <attr name="round_radius" />
+        <attr name="round_radius_left" />
+        <attr name="round_radius_right" />
+        <attr name="round_radius_top" />
+        <attr name="round_radius_bottom" />
+        <attr name="round_radius_top_left" />
+        <attr name="round_radius_top_right" />
+        <attr name="round_radius_bottom_left" />
+        <attr name="round_radius_bottom_right" />
+        <attr name="round_stroke_width" />
+        <attr name="round_stroke_color" />
+    </declare-styleable>
+
+    <!--用来提示的属性-->
+    <declare-styleable name="RoundImage">
         <attr name="round_bg" />
         <attr name="round_bg_tint" />
         <attr name="round_bg_tint_mode" />
