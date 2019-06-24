@@ -9,12 +9,8 @@ import android.widget.LinearLayout;
  * Created by HeZX on 2019/6/19.
  */
 public class RoundLinear extends LinearLayout {
-    RoundHelper helper = new RoundHelper();
 
-    public RoundLinear(Context context, int radius) {
-        this(context);
-        helper.setRadius(radius);
-    }
+    RoundHelper helper = new RoundHelper();
 
     public RoundLinear(Context context) {
         this(context, null);
@@ -46,5 +42,9 @@ public class RoundLinear extends LinearLayout {
     protected void drawableStateChanged() {
         super.drawableStateChanged();
         if (helper != null) helper.drawableStateChanged(this);
+    }
+
+    public RoundHelper getRoundHelper() {
+        return helper;
     }
 }

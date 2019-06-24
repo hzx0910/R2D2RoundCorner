@@ -9,12 +9,8 @@ import android.widget.TextView;
  * Created by HeZX on 2019/6/19.
  */
 public class RoundText extends TextView {
-    RoundHelper helper = new RoundHelper();
 
-    public RoundText(Context context, int radius) {
-        this(context);
-        helper.setRadius(radius);
-    }
+    RoundHelper helper = new RoundHelper();
 
     public RoundText(Context context) {
         this(context, null);
@@ -46,5 +42,9 @@ public class RoundText extends TextView {
     protected void drawableStateChanged() {
         super.drawableStateChanged();
         if (helper != null) helper.drawableStateChanged(this);
+    }
+
+    public RoundHelper getRoundHelper() {
+        return helper;
     }
 }

@@ -43,6 +43,7 @@
         android:addStatesFromChildren="true"
         app:round_bg="@drawable/bg_gradient"
         app:round_radius="15dp"
+        app:round_radius_bottom_left="6dp"
         app:round_stroke_color="@color/stroke_stateful"
         app:round_stroke_width="2dp">
 

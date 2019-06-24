@@ -24,26 +24,19 @@ public class RoundHelper {
     private float[] radii = new float[8];  // top-left, top-right, bottom-right, bottom-left
     private Path clipPath;                 // 剪裁区域
     private Paint paint;                   // 画笔
-    private ColorStateList strokeColor;    // 描边颜色
-    private int strokeWidth;               // 描边半径
+    private ColorStateList strokeColor;    // 描边颜色列表
+    private int strokeWidth;               // 描边宽度
     private RectF layer;                   // 画布图层大小
-    private int radius;                    // 圆角大小
     private Drawable bg;                   // 背景
-    private ColorStateList bg_tint;        // 背景tint颜色
+    private ColorStateList bg_tint;        // 背景tint颜色列表
     private PorterDuff.Mode bg_tint_mode;  // 背景tint模式
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
 
     public void init(Context context, View view, AttributeSet attrs) {
         view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RoundLayout);
         strokeColor = ta.getColorStateList(R.styleable.RoundLayout_round_stroke_color);
         strokeWidth = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_stroke_width, 0);
-        if (radius == 0) {
-            radius = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius, 0);
-        }
+        int radius = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius, 0);
         bg = ta.getDrawable(R.styleable.RoundLayout_round_bg);
         bg_tint = ta.getColorStateList(R.styleable.RoundLayout_round_bg_tint);
         bg_tint_mode = parseTintMode(ta.getInt(R.styleable.RoundLayout_round_bg_tint_mode, -1), PorterDuff.Mode.SRC_IN);
@@ -55,21 +48,11 @@ public class RoundHelper {
 
         int radiusTopLeft = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_top_left, radiusLeft > 0 ? radiusLeft : radiusTop);
         int radiusTopRight = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_top_right, radiusRight > 0 ? radiusRight : radiusTop);
-        int radiusBottomLeft = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom_left, radiusLeft > 0 ? radiusLeft : radiusBottom);
         int radiusBottomRight = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom_right, radiusRight > 0 ? radiusRight : radiusBottom);
+        int radiusBottomLeft = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom_left, radiusLeft > 0 ? radiusLeft : radiusBottom);
         ta.recycle();
 
-        radii[0] = radiusTopLeft;
-        radii[1] = radiusTopLeft;
-
-        radii[2] = radiusTopRight;
-        radii[3] = radiusTopRight;
-
-        radii[4] = radiusBottomRight;
-        radii[5] = radiusBottomRight;
-
-        radii[6] = radiusBottomLeft;
-        radii[7] = radiusBottomLeft;
+        setRadius(radiusTopLeft, radiusTopRight, radiusBottomRight, radiusBottomLeft);
 
         layer = new RectF();
         clipPath = new Path();
@@ -216,5 +199,68 @@ public class RoundHelper {
             default:
                 return defaultMode;
         }
+    }
+
+    //==============设置角半径=============//
+    public float[] getRadii() {
+        return radii;
+    }
+
+    public void setRadius(int radius) {
+        for (int i = 0; i < 8; i++) {
+            radii[i] = radius;
+        }
+    }
+
+    public void setRadius(int topLeft, int topRight, int bottomRight, int bottomLeft) {
+        radii[0] = topLeft;
+        radii[1] = topLeft;
+        radii[2] = topRight;
+        radii[3] = topRight;
+        radii[4] = bottomRight;
+        radii[5] = bottomRight;
+        radii[6] = bottomLeft;
+        radii[7] = bottomLeft;
+    }
+
+    //==============设置边框和背景=============//
+    public ColorStateList getStrokeColor() {
+        return strokeColor;
+    }
+
+    public void setStrokeColor(ColorStateList strokeColor) {
+        this.strokeColor = strokeColor;
+    }
+
+    public int getStrokeWidth() {
+        return strokeWidth;
+    }
+
+    public void setStrokeWidth(int strokeWidth) {
+        this.strokeWidth = strokeWidth;
+    }
+
+    public Drawable getBg() {
+        return bg;
+    }
+
+    public void setBg(Drawable bg) {
+        this.bg = bg;
+    }
+
+    public ColorStateList getBg_tint() {
+        return bg_tint;
+    }
+
+    public void setBg_tint(ColorStateList bg_tint) {
+        this.bg_tint = bg_tint;
+    }
+
+    public PorterDuff.Mode getBg_tint_mode() {
+        return bg_tint_mode;
+    }
+
+    public void setBg_tint_mode(PorterDuff.Mode bg_tint_mode) {
+        this.bg_tint_mode = bg_tint_mode;
     }
 }
