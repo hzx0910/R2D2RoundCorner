@@ -20,7 +20,7 @@ dependencies {
 }
 ```
 
-**Set each corner in your layout.xml!**
+**Step 3. Set each corner in your layout.xml**
 ```xml
 
     <make.more.r2d2.round_corner.RoundText
