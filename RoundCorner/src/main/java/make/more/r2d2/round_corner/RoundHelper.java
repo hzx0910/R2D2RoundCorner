@@ -22,14 +22,23 @@ import android.view.View;
 public class RoundHelper {
 
     private float[] radii = new float[8];  // top-left, top-right, bottom-right, bottom-left
-    private Path clipPath;                 // 剪裁区域
     private Paint paint;                   // 画笔
     private ColorStateList strokeColor;    // 描边颜色列表
     private int strokeWidth;               // 描边宽度
-    private RectF layer;                   // 画布图层大小
     private Drawable bg;                   // 背景
+    private ColorStateList bg_color;       // 背景颜色列表
     private ColorStateList bg_tint;        // 背景tint颜色列表
     private PorterDuff.Mode bg_tint_mode;  // 背景tint模式
+
+    private RectF layer = new RectF();                  // 画布图层大小
+    private RectF tempRectF;                            // 临时矩形 onDraw中避免 new 新对象
+    private Path clipPath = new Path();                 // 剪裁区域
+    private Path tempPath = new Path();                 // 临时区域 onDraw中避免 new 新对象
+    private PorterDuffXfermode mode_dst_out = new PorterDuffXfermode(PorterDuff.Mode.DST_OUT);
+    private PorterDuffXfermode mode_src_over = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
+    private PorterDuffXfermode mode_bg_tint;
+
+    PaintFlagsDrawFilter filter = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
 
     public void init(Context context, View view, AttributeSet attrs) {
         view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -37,7 +46,14 @@ public class RoundHelper {
         strokeColor = ta.getColorStateList(R.styleable.RoundLayout_round_stroke_color);
         strokeWidth = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_stroke_width, 0);
         int radius = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius, 0);
-        bg = ta.getDrawable(R.styleable.RoundLayout_round_bg);
+        try {
+            bg = ta.getDrawable(R.styleable.RoundLayout_round_bg);
+        } catch (Exception e) {
+        }
+        try {
+            bg_color = ta.getColorStateList(R.styleable.RoundLayout_round_bg);
+        } catch (Exception e) {
+        }
         bg_tint = ta.getColorStateList(R.styleable.RoundLayout_round_bg_tint);
         bg_tint_mode = parseTintMode(ta.getInt(R.styleable.RoundLayout_round_bg_tint_mode, -1), PorterDuff.Mode.SRC_IN);
 
@@ -53,12 +69,12 @@ public class RoundHelper {
         ta.recycle();
 
         setRadius(radiusTopLeft, radiusTopRight, radiusBottomRight, radiusBottomLeft);
-
-        layer = new RectF();
-        clipPath = new Path();
+        if (bg != null && bg_tint != null) mode_bg_tint = new PorterDuffXfermode(bg_tint_mode);
         paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setAntiAlias(true);
+        if (Build.VERSION.SDK_INT <= 18) tempRectF = new RectF();
+
     }
 
     @SuppressWarnings("unused")
@@ -70,7 +86,10 @@ public class RoundHelper {
 
     public void drawBG(Canvas canvas, int[] drawableState) {
         canvas.saveLayer(layer, null, Canvas.ALL_SAVE_FLAG);
-        canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
+        canvas.setDrawFilter(filter);
+        if (bg_color != null) {
+            canvas.drawColor(bg_color.getColorForState(drawableState, bg_color.getDefaultColor()));
+        }
         if (bg != null) {
             bg.setState(drawableState);
             bg.setBounds(0, 0, (int) layer.width(), (int) layer.height());
@@ -78,10 +97,8 @@ public class RoundHelper {
             if (bg_tint != null) {
                 paint.setColor(bg_tint.getColorForState(drawableState, bg_tint.getDefaultColor()));
                 paint.setStyle(Paint.Style.FILL);
-                paint.setXfermode(new PorterDuffXfermode(bg_tint_mode));
-                Path path = new Path();
-                path.addRect(0, 0, (int) layer.width(), (int) layer.height(), Path.Direction.CW);
-                canvas.drawPath(path, paint);
+                paint.setXfermode(mode_bg_tint);
+                canvas.drawRect(0, 0, (int) layer.width(), (int) layer.height(), paint);
             }
         }
     }
@@ -89,6 +106,9 @@ public class RoundHelper {
     public void drawableStateChanged(View view) {
         boolean refresh = false;
         int[] drawableState = view.getDrawableState();
+        if (bg_color != null && bg_color.isStateful()) {
+            refresh = true;
+        }
         if (bg != null && bg.isStateful()) {
             if (bg.setState(drawableState)) {
                 refresh = true;
@@ -100,30 +120,30 @@ public class RoundHelper {
         if (bg_tint != null && bg_tint.isStateful()) {
             refresh = true;
         }
-        if (refresh) view.invalidate();
+        if (refresh) view.postInvalidate();
     }
 
     public void drawClip(Canvas canvas, int[] drawableState) {
         if (strokeWidth > 0 && strokeColor != null) {
             paint.setStrokeWidth(strokeWidth * 2);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+            paint.setXfermode(mode_dst_out);
             paint.setColor(Color.WHITE);
             paint.setStyle(Paint.Style.STROKE);
             canvas.drawPath(clipPath, paint);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
+            paint.setXfermode(mode_src_over);
             paint.setColor(strokeColor.getColorForState(drawableState, strokeColor.getDefaultColor()));
             paint.setStyle(Paint.Style.STROKE);
             canvas.drawPath(clipPath, paint);
         }
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+        paint.setXfermode(mode_dst_out);
 
         if (Build.VERSION.SDK_INT > 18) {
-            Path path = new Path();
-            path.addRect(0, 0, (int) layer.width(), (int) layer.height(), Path.Direction.CW);
-            path.op(clipPath, Path.Op.DIFFERENCE);
-            canvas.drawPath(path, paint);
+            tempPath.reset();
+            tempPath.addRect(0, 0, (int) layer.width(), (int) layer.height(), Path.Direction.CW);
+            tempPath.op(clipPath, Path.Op.DIFFERENCE);
+            canvas.drawPath(tempPath, paint);
         } else {
             clipUnder18(canvas);
         }
@@ -135,50 +155,49 @@ public class RoundHelper {
         float bottomRight = radii[4];
         float bottomLeft = radii[6];
 
-        Path path = new Path();
         if (topLeft > 0) {
-            path.reset();
-            path.moveTo(0, topLeft);
-            path.lineTo(0, 0);
-            path.lineTo(topLeft, 0);
-            path.arcTo(new RectF(0, 0, topLeft * 2, topLeft * 2),
-                    -90, -90);
-            path.close();
-            canvas.drawPath(path, paint);
+            tempPath.reset();
+            tempPath.moveTo(0, topLeft);
+            tempPath.lineTo(0, 0);
+            tempPath.lineTo(topLeft, 0);
+            tempRectF.set(0, 0, topLeft * 2, topLeft * 2);
+            tempPath.arcTo(tempRectF, -90, -90);
+            tempPath.close();
+            canvas.drawPath(tempPath, paint);
         }
         if (topRight > 0) {
             float width = layer.width();
-            path.reset();
-            path.moveTo(width - topRight, 0);
-            path.lineTo(width, 0);
-            path.lineTo(width, topRight);
-            path.arcTo(new RectF(width - 2 * topRight, 0, width,
-                    topRight * 2), 0, -90);
-            path.close();
-            canvas.drawPath(path, paint);
+            tempPath.reset();
+            tempPath.moveTo(width - topRight, 0);
+            tempPath.lineTo(width, 0);
+            tempPath.lineTo(width, topRight);
+            tempRectF.set(width - 2 * topRight, 0, width, topRight * 2);
+            tempPath.arcTo(tempRectF, 0, -90);
+            tempPath.close();
+            canvas.drawPath(tempPath, paint);
         }
         if (bottomRight > 0) {
             float height = layer.height();
             float width = layer.width();
-            path.reset();
-            path.moveTo(width - bottomRight, height);
-            path.lineTo(width, height);
-            path.lineTo(width, height - bottomRight);
-            path.arcTo(new RectF(width - 2 * bottomRight, height - 2
-                    * bottomRight, width, height), 0, 90);
-            path.close();
-            canvas.drawPath(path, paint);
+            tempPath.reset();
+            tempPath.moveTo(width - bottomRight, height);
+            tempPath.lineTo(width, height);
+            tempPath.lineTo(width, height - bottomRight);
+            tempRectF.set(width - 2 * bottomRight, height - 2 * bottomRight, width, height);
+            tempPath.arcTo(tempRectF, 0, 90);
+            tempPath.close();
+            canvas.drawPath(tempPath, paint);
         }
         if (bottomLeft > 0) {
             float height = layer.height();
-            path.reset();
-            path.moveTo(0, height - bottomLeft);
-            path.lineTo(0, height);
-            path.lineTo(bottomLeft, height);
-            path.arcTo(new RectF(0, height - 2 * bottomLeft,
-                    bottomLeft * 2, height), 90, 90);
-            path.close();
-            canvas.drawPath(path, paint);
+            tempPath.reset();
+            tempPath.moveTo(0, height - bottomLeft);
+            tempPath.lineTo(0, height);
+            tempPath.lineTo(bottomLeft, height);
+            tempRectF.set(0, height - 2 * bottomLeft, bottomLeft * 2, height);
+            tempPath.arcTo(tempRectF, 90, 90);
+            tempPath.close();
+            canvas.drawPath(tempPath, paint);
         }
     }
 
@@ -240,12 +259,22 @@ public class RoundHelper {
         this.strokeWidth = strokeWidth;
     }
 
+    public ColorStateList getBg_color() {
+        return bg_color;
+    }
+
+    public void setBg_color(ColorStateList bg_color) {
+        this.bg_color = bg_color;
+        this.bg = null;
+    }
+
     public Drawable getBg() {
         return bg;
     }
 
     public void setBg(Drawable bg) {
         this.bg = bg;
+        this.bg_color = null;
     }
 
     public ColorStateList getBg_tint() {

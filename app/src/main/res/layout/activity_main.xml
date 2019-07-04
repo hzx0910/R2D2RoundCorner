@@ -33,10 +33,8 @@
         android:clickable="true"
         android:focusable="true"
         android:text="Hello World!"
-        app:round_bg="@drawable/bg_gradient"
-        app:round_radius="15dp"
-        app:round_stroke_color="@color/colorAccent"
-        app:round_stroke_width="2dp" />
+        app:round_bg="@color/stroke_stateful"
+        app:round_radius="15dp" />
 
     <make.more.r2d2.round_corner.RoundLinear
         style="@style/base_button"
@@ -58,16 +56,16 @@
 
     <make.more.r2d2.round_corner.RoundLinear
         style="@style/base_button"
+        android:clickable="true"
         android:enabled="true"
         app:round_bg="@drawable/bg_gradient"
         app:round_radius="15dp"
         app:round_radius_bottom_left="6dp"
-        app:round_radius_top_right="6dp"
-        app:round_stroke_color="@color/colorAccent"
-        app:round_stroke_width="2dp" />
+        app:round_radius_top_right="6dp" />
 
     <make.more.r2d2.round_corner.RoundLinear
         style="@style/base_button"
+        android:clickable="true"
         android:enabled="false"
         app:round_bg="@drawable/bg_gradient"
         app:round_radius="15dp"
