@@ -5,10 +5,13 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
+import make.more.r2d2.round_corner.help.RoundAble;
+import make.more.r2d2.round_corner.help.RoundHelper;
+
 /**
  * Created by HeZX on 2019/6/19.
  */
-public class RoundRelative extends RelativeLayout {
+public class RoundRelative extends RelativeLayout implements RoundAble {
 
     RoundHelper helper = new RoundHelper();
 
@@ -44,6 +47,7 @@ public class RoundRelative extends RelativeLayout {
         if (helper != null) helper.drawableStateChanged(this);
     }
 
+    @Override
     public RoundHelper getRoundHelper() {
         return helper;
     }

@@ -146,4 +146,58 @@
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
     </declare-styleable>
+
+    <!--用来提示的属性-->
+    <declare-styleable name="RoundView">
+        <attr name="round_bg" />
+        <attr name="round_bg_tint" />
+        <attr name="round_bg_tint_mode" />
+        <attr name="round_radius" />
+        <attr name="round_radius_left" />
+        <attr name="round_radius_right" />
+        <attr name="round_radius_top" />
+        <attr name="round_radius_bottom" />
+        <attr name="round_radius_top_left" />
+        <attr name="round_radius_top_right" />
+        <attr name="round_radius_bottom_left" />
+        <attr name="round_radius_bottom_right" />
+        <attr name="round_stroke_width" />
+        <attr name="round_stroke_color" />
+    </declare-styleable>
+
+    <!--用来提示的属性-->
+    <declare-styleable name="RoundCheck">
+        <attr name="round_bg" />
+        <attr name="round_bg_tint" />
+        <attr name="round_bg_tint_mode" />
+        <attr name="round_radius" />
+        <attr name="round_radius_left" />
+        <attr name="round_radius_right" />
+        <attr name="round_radius_top" />
+        <attr name="round_radius_bottom" />
+        <attr name="round_radius_top_left" />
+        <attr name="round_radius_top_right" />
+        <attr name="round_radius_bottom_left" />
+        <attr name="round_radius_bottom_right" />
+        <attr name="round_stroke_width" />
+        <attr name="round_stroke_color" />
+    </declare-styleable>
+
+    <!--用来提示的属性-->
+    <declare-styleable name="RoundRadio">
+        <attr name="round_bg" />
+        <attr name="round_bg_tint" />
+        <attr name="round_bg_tint_mode" />
+        <attr name="round_radius" />
+        <attr name="round_radius_left" />
+        <attr name="round_radius_right" />
+        <attr name="round_radius_top" />
+        <attr name="round_radius_bottom" />
+        <attr name="round_radius_top_left" />
+        <attr name="round_radius_top_right" />
+        <attr name="round_radius_bottom_left" />
+        <attr name="round_radius_bottom_right" />
+        <attr name="round_stroke_width" />
+        <attr name="round_stroke_color" />
+    </declare-styleable>
 </resources>

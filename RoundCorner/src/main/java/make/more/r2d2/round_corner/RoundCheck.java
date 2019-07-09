@@ -3,27 +3,27 @@ package make.more.r2d2.round_corner;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
+import android.widget.CheckBox;
 
 import make.more.r2d2.round_corner.help.RoundAble;
 import make.more.r2d2.round_corner.help.RoundHelper;
 
 /**
- * Created by HeZX on 2019/6/19.
+ * Created by HeZX on 2019/7/9.
  */
-public class RoundFrame extends FrameLayout implements RoundAble {
+public class RoundCheck extends CheckBox implements RoundAble {
 
     RoundHelper helper = new RoundHelper();
 
-    public RoundFrame(Context context) {
+    public RoundCheck(Context context) {
         this(context, null);
     }
 
-    public RoundFrame(Context context, AttributeSet attrs) {
+    public RoundCheck(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RoundFrame(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RoundCheck(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         helper.init(context, this, attrs);
     }
@@ -35,9 +35,9 @@ public class RoundFrame extends FrameLayout implements RoundAble {
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         helper.drawBG(canvas, getDrawableState());
-        super.dispatchDraw(canvas);
+        super.onDraw(canvas);
         helper.drawClip(canvas, getDrawableState());
     }
 
