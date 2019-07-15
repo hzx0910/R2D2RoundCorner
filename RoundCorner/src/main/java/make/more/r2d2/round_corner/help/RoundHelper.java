@@ -44,31 +44,32 @@ public class RoundHelper {
 
     public void init(Context context, View view, AttributeSet attrs) {
         view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RoundLayout);
-        strokeColor = ta.getColorStateList(R.styleable.RoundLayout_round_stroke_color);
-        strokeWidth = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_stroke_width, 0);
-        int radius = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius, 0);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RoundLayout);
+        if (array == null) return;
+        strokeColor = array.getColorStateList(R.styleable.RoundLayout_round_stroke_color);
+        strokeWidth = array.getDimensionPixelSize(R.styleable.RoundLayout_round_stroke_width, 0);
+        int radius = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius, 0);
         try {
-            bg = ta.getDrawable(R.styleable.RoundLayout_round_bg);
+            bg = array.getDrawable(R.styleable.RoundLayout_round_bg);
         } catch (Exception e) {
         }
         try {
-            bg_color = ta.getColorStateList(R.styleable.RoundLayout_round_bg);
+            bg_color = array.getColorStateList(R.styleable.RoundLayout_round_bg);
         } catch (Exception e) {
         }
-        bg_tint = ta.getColorStateList(R.styleable.RoundLayout_round_bg_tint);
-        bg_tint_mode = parseTintMode(ta.getInt(R.styleable.RoundLayout_round_bg_tint_mode, -1), PorterDuff.Mode.SRC_IN);
+        bg_tint = array.getColorStateList(R.styleable.RoundLayout_round_bg_tint);
+        bg_tint_mode = parseTintMode(array.getInt(R.styleable.RoundLayout_round_bg_tint_mode, -1), PorterDuff.Mode.SRC_IN);
 
-        int radiusLeft = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_left, radius);
-        int radiusRight = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_right, radius);
-        int radiusTop = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_top, radius);
-        int radiusBottom = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom, radius);
+        int radiusLeft = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_left, radius);
+        int radiusRight = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_right, radius);
+        int radiusTop = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_top, radius);
+        int radiusBottom = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom, radius);
 
-        int radiusTopLeft = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_top_left, radiusLeft > 0 ? radiusLeft : radiusTop);
-        int radiusTopRight = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_top_right, radiusRight > 0 ? radiusRight : radiusTop);
-        int radiusBottomRight = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom_right, radiusRight > 0 ? radiusRight : radiusBottom);
-        int radiusBottomLeft = ta.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom_left, radiusLeft > 0 ? radiusLeft : radiusBottom);
-        ta.recycle();
+        int radiusTopLeft = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_top_left, radiusLeft > 0 ? radiusLeft : radiusTop);
+        int radiusTopRight = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_top_right, radiusRight > 0 ? radiusRight : radiusTop);
+        int radiusBottomRight = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom_right, radiusRight > 0 ? radiusRight : radiusBottom);
+        int radiusBottomLeft = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom_left, radiusLeft > 0 ? radiusLeft : radiusBottom);
+        array.recycle();
 
         setRadius(radiusTopLeft, radiusTopRight, radiusBottomRight, radiusBottomLeft);
         if (bg != null && bg_tint != null) mode_bg_tint = new PorterDuffXfermode(bg_tint_mode);
@@ -270,6 +271,10 @@ public class RoundHelper {
         this.bg = null;
     }
 
+    public void setBg_color(int bg_color) {
+        setBg_color(ColorStateList.valueOf(bg_color));
+    }
+
     public Drawable getBg() {
         return bg;
     }
@@ -286,6 +291,11 @@ public class RoundHelper {
     public void setBg_tint(ColorStateList bg_tint) {
         this.bg_tint = bg_tint;
     }
+
+    public void setBg_tint(int bg_tint) {
+        setBg_tint(ColorStateList.valueOf(bg_tint));
+    }
+
 
     public PorterDuff.Mode getBg_tint_mode() {
         return bg_tint_mode;

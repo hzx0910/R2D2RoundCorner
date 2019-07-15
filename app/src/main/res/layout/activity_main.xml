@@ -9,14 +9,14 @@
     tools:context=".MainActivity">
 
     <make.more.r2d2.round_corner.RoundText
-        style="@style/base_button"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:clickable="true"
         android:focusable="true"
         app:round_bg="@mipmap/android"
         app:round_bg_tint="@color/stateful"
         app:round_bg_tint_mode="add"
-        app:round_radius="60dp"
+        app:round_radius="50dp"
         app:round_radius_top_right="30dp"
         app:round_stroke_color="@color/stateful"
         app:round_stroke_width="2dp" />
@@ -81,17 +81,30 @@
         app:round_stroke_color="@color/colorAccent"
         app:round_stroke_width="2dp" />
 
-    <make.more.r2d2.round_corner.RoundView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="10dp"
-        app:round_bg="@color/stateful"
-        app:round_radius="10dp" />
+    <make.more.r2d2.round_corner.ShadowFrame
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:padding="6dp"
+        app:shadow_color="@color/stateful"
+        app:shadow_dx="2dp"
+        app:shadow_dy="2dp"
+        app:shadow_radius="2dp">
+
+        <make.more.r2d2.round_corner.RoundView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:round_bg="#8F8"
+            app:round_radius="20dp"
+            app:round_radius_bottom_left="4dp" />
+
+    </make.more.r2d2.round_corner.ShadowFrame>
+
 
     <make.more.r2d2.round_corner.RoundCheck
         android:layout_width="120dp"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:button="@drawable/gap"
         android:checked="true"
         android:clickable="true"

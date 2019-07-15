@@ -200,4 +200,44 @@
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
     </declare-styleable>
+
+    <!--              阴影布局参数区                -->
+    <!--阴影颜色-->
+    <attr name="shadow_color" format="color" />
+    <!--阴影半径-->
+    <attr name="shadow_radius" format="dimension" />
+    <!--阴影X轴偏移-->
+    <attr name="shadow_dx" format="dimension" />
+    <!--阴影Y轴偏移-->
+    <attr name="shadow_dy" format="dimension" />
+
+    <!--用来读取的属性-->
+    <declare-styleable name="ShadowLayout">
+        <attr name="shadow_color" />
+        <attr name="shadow_radius" />
+        <attr name="shadow_dx" />
+        <attr name="shadow_dy" />
+    </declare-styleable>
+
+    <!--用来提示的属性-->
+    <declare-styleable name="ShadowFrame">
+        <attr name="shadow_color" />
+        <attr name="shadow_radius" />
+        <attr name="shadow_dx" />
+        <attr name="shadow_dy" />
+    </declare-styleable>
+    <!--用来提示的属性-->
+    <declare-styleable name="ShadowLinear">
+        <attr name="shadow_color" />
+        <attr name="shadow_radius" />
+        <attr name="shadow_dx" />
+        <attr name="shadow_dy" />
+    </declare-styleable>
+    <!--用来提示的属性-->
+    <declare-styleable name="ShadowRelative">
+        <attr name="shadow_color" />
+        <attr name="shadow_radius" />
+        <attr name="shadow_dx" />
+        <attr name="shadow_dy" />
+    </declare-styleable>
 </resources>
