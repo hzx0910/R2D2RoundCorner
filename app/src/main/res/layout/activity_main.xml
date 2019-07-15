@@ -25,7 +25,7 @@
         style="@style/base_button"
         android:clickable="true"
         android:focusable="true"
-        android:text="Hello World!"
+        android:text="Try Click!"
         app:round_bg="@color/stateful"
         app:round_radius="15dp" />
 
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:text="Hello World!" />
+            android:text="Try Click!" />
 
     </make.more.r2d2.round_corner.RoundLinear>
 
@@ -92,7 +92,7 @@
         app:shadow_radius="2dp">
 
         <make.more.r2d2.round_corner.RoundView
-            android:layout_width="40dp"
+            android:layout_width="80dp"
             android:layout_height="40dp"
             app:round_bg="#8F8"
             app:round_radius="20dp"
