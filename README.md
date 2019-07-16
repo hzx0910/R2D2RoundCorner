@@ -26,3 +26,22 @@ dependencies {
 |  ----  | ----  |
 | ![avatar](preview/1.png)  | &lt;make.more.r2d2.round_corner.RoundText <br /> &nbsp; style="@style/base_button" <br /> &nbsp; android:clickable="true" <br /> &nbsp; android:text="Try Click!" <br /> &nbsp; app:round_bg="@color/stateful" <br /> &nbsp; app:round_radius="15dp" <br /> &nbsp; app:round_radius_top_left="6dp" <br /> &nbsp; app:round_stroke_color="@color/colorAccent" <br /> &nbsp; app:round_stroke_width="2dp" /&gt;|
 | ![avatar](preview/2.png)  | &lt;make.more.r2d2.round_corner.ShadowFrame <br /> &nbsp; android:layout_width="wrap_content" <br /> &nbsp; android:layout_height="wrap_content" <br /> &nbsp; android:clickable="true" <br /> &nbsp; android:padding="6dp" <br /> &nbsp; app:shadow_color="@color/stateful" <br /> &nbsp; app:shadow_dx="2dp" <br /> &nbsp; app:shadow_dy="2dp" <br /> &nbsp; app:shadow_radius="2dp" &gt;   <br /><br /> &nbsp; &lt;make.more.r2d2.round_corner.RoundView <br /> &nbsp; &nbsp; android:layout_width="80dp" <br /> &nbsp; &nbsp; android:layout_height="40dp" <br /> &nbsp; &nbsp; app:round_bg="#8F8" <br /> &nbsp; &nbsp; app:round_radius="20dp" <br /> &nbsp; &nbsp; app:round_radius_bottom_left="4dp" /&gt; <br /> &nbsp; &lt;/make.more.r2d2.round_corner.ShadowFrame&gt; |
+
+**PLUS: attrs notice**
+
+| Round Corner ATTR | NOTICE |
+|  ----  | ----  |
+| round_bg | Drawable,Color,**ColorStateList** |
+| round_bg_tint | Color,ColorStateList **support Android 4.0+** |
+| round_bg_tint_mode | src_over,src_in,src_atop,multiply,screen,add |
+| round_radius | Dimension |
+| round_radius_* | left,right,top,bottom Dimension |
+| round_stroke_width | Dimension |
+| round_stroke_color | Color,**ColorStateList** |
+
+| Shadow ATTR | NOTICE |
+|  ----  | ----  |
+| shadow_color | Color,**ColorStateList** default:#66000000 |
+| shadow_radius | Dimension |
+| shadow_dx | Dimension |
+| shadow_dy | Dimension |
