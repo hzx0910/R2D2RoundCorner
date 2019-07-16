@@ -24,10 +24,12 @@
     <make.more.r2d2.round_corner.RoundText
         style="@style/base_button"
         android:clickable="true"
-        android:focusable="true"
         android:text="Try Click!"
         app:round_bg="@color/stateful"
-        app:round_radius="15dp" />
+        app:round_radius="15dp"
+        app:round_radius_top_left="6dp"
+        app:round_stroke_color="@color/colorAccent"
+        app:round_stroke_width="2dp" />
 
     <make.more.r2d2.round_corner.RoundLinear
         style="@style/base_button"
