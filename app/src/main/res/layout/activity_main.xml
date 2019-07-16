@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <make.more.r2d2.round_corner.RoundText
+    <make.more.r2d2.round_corner.RoundImage
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:clickable="true"
@@ -18,9 +18,7 @@
         app:round_bg_tint="@color/stateful"
         app:round_bg_tint_mode="add"
         app:round_radius="50dp"
-        app:round_radius_top_right="30dp"
-        app:round_stroke_color="@color/stateful"
-        app:round_stroke_width="2dp" />
+        app:round_radius_top_right="30dp"/>
 
     <make.more.r2d2.round_corner.RoundText
         style="@style/base_button"
