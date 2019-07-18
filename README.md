@@ -1,6 +1,6 @@
 # R2D2RoundCorner
 
-Android round corner layout and view with shadow
+Android round corner layouts and ImageView TextView with shadow
 
 **Step 1. Add the JitPack repository to your root build.gradle:**
 ```groovy
