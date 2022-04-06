@@ -18,7 +18,9 @@
         app:round_bg_tint="@color/stateful"
         app:round_bg_tint_mode="add"
         app:round_radius="50dp"
-        app:round_radius_top_right="30dp"/>
+        app:round_radius_top_right="30dp"
+        app:round_stroke_color="@color/colorAccent"
+        app:round_stroke_width="4dp" />
 
     <make.more.r2d2.round_corner.RoundText
         style="@style/base_button"
@@ -28,7 +30,7 @@
         app:round_radius="15dp"
         app:round_radius_top_left="6dp"
         app:round_stroke_color="@color/colorAccent"
-        app:round_stroke_width="2dp" />
+        app:round_stroke_width="4dp" />
 
     <make.more.r2d2.round_corner.RoundLinear
         style="@style/base_button"
@@ -37,7 +39,7 @@
         app:round_radius="15dp"
         app:round_radius_bottom_left="6dp"
         app:round_stroke_color="@color/stateful"
-        app:round_stroke_width="2dp">
+        app:round_stroke_width="4dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,14 +59,14 @@
         app:round_radius_bottom_left="6dp"
         app:round_radius_top_right="6dp"
         app:round_stroke_color="@color/colorAccent"
-        app:round_stroke_width="2dp" />
+        app:round_stroke_width="4dp" />
 
     <make.more.r2d2.round_corner.RoundLinear
         style="@style/base_button"
         app:round_bg="#99F"
         app:round_radius_top="15dp"
         app:round_stroke_color="@color/colorAccent"
-        app:round_stroke_width="2dp" />
+        app:round_stroke_width="4dp" />
 
     <make.more.r2d2.round_corner.RoundLinear
         style="@style/base_button"
@@ -72,7 +74,7 @@
         android:layout_marginBottom="-2dp"
         app:round_bg="#99F"
         app:round_stroke_color="@color/colorAccent"
-        app:round_stroke_width="2dp" />
+        app:round_stroke_width="4dp" />
 
     <make.more.r2d2.round_corner.RoundLinear
         style="@style/base_button"
@@ -80,7 +82,7 @@
         app:round_bg="#99F"
         app:round_radius_bottom="15dp"
         app:round_stroke_color="@color/colorAccent"
-        app:round_stroke_width="2dp" />
+        app:round_stroke_width="4dp" />
 
     <make.more.r2d2.round_corner.ShadowFrame
         android:layout_width="wrap_content"
@@ -115,7 +117,7 @@
         app:round_bg="@color/stateful"
         app:round_radius="20dp"
         app:round_stroke_color="@color/colorAccent"
-        app:round_stroke_width="2dp" />
+        app:round_stroke_width="4dp" />
 
     <RadioGroup
         android:layout_width="300dp"
@@ -133,7 +135,7 @@
             app:round_bg="@color/stateful"
             app:round_radius_left="20dp"
             app:round_stroke_color="@color/colorAccent"
-            app:round_stroke_width="2dp" />
+            app:round_stroke_width="4dp" />
 
         <make.more.r2d2.round_corner.RoundRadio
             android:layout_width="0dp"
@@ -146,7 +148,7 @@
             android:text="center"
             app:round_bg="@color/stateful"
             app:round_stroke_color="@color/colorAccent"
-            app:round_stroke_width="2dp" />
+            app:round_stroke_width="4dp" />
 
         <make.more.r2d2.round_corner.RoundRadio
             android:layout_width="0dp"
@@ -158,6 +160,6 @@
             app:round_bg="@color/stateful"
             app:round_radius_right="20dp"
             app:round_stroke_color="@color/colorAccent"
-            app:round_stroke_width="2dp" />
+            app:round_stroke_width="4dp" />
     </RadioGroup>
 </LinearLayout>

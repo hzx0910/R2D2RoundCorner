@@ -131,19 +131,19 @@ public class ShadowHelper {
         this.shadowRadius = shadowRadius;
     }
 
-    public float getdX() {
+    public float getDx() {
         return dX;
     }
 
-    public void setdX(float dX) {
+    public void setDx(float dX) {
         this.dX = dX;
     }
 
-    public float getdY() {
+    public float getDy() {
         return dY;
     }
 
-    public void setdY(float dY) {
+    public void setDy(float dY) {
         this.dY = dY;
     }
 }
