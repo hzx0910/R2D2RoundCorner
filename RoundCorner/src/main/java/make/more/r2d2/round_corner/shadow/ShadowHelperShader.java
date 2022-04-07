@@ -14,11 +14,14 @@ import make.more.r2d2.round_corner.help.RoundAble;
  * Created by HeZX on 2022-04-07.
  * 采用 setShader 方法，不用关闭硬件加速
  */
-public class ShadowHelperShader extends ShadowHelper {
+class ShadowHelperShader extends ShadowHelper {
 
     private Paint centerPaint;
     private Paint borderPaint;
     private Paint cornerPaint;
+
+    ShadowHelperShader() {
+    }
 
     @Override
     void init() {
@@ -35,7 +38,6 @@ public class ShadowHelperShader extends ShadowHelper {
     void drawShadow(Canvas canvas, View view, RoundAble roundAble, int[] drawableState) {
         float[] radii = roundAble.getRoundHelper().getRadii();
         int color = shadowColor.getColorForState(drawableState, shadowColor.getDefaultColor());
-        if (color >>> 24 == 0xFF) color -= 0x01000000;//必须有透明度才能画出阴影 故alpha最大设置0xFE
         {   //画中间的实心
             float top = radiusS;
             float bottom = view.getHeight() - radiusS;
@@ -76,8 +78,8 @@ public class ShadowHelperShader extends ShadowHelper {
             float radiusBR = radii[4];
             float radiusBL = radii[6];
             //必须有透明度才能画出阴影 故alpha最小设置0x01
-            int[] colors = new int[]{color, color & 0x01111111};
-            //shadowPaint.setShadowLayer(shadowRadius, 0, 0, from);//需要关闭硬件加速，废弃
+            int to = color & 0x00FFFFFF;
+            int[] colors = new int[]{color, to};
             //上方渐变
             borderPaint.setShader(new LinearGradient(0, +radiusS, 0, -radiusS,
                     colors, null, Shader.TileMode.CLAMP));
@@ -95,7 +97,8 @@ public class ShadowHelperShader extends ShadowHelper {
                     colors, null, Shader.TileMode.CLAMP));
             canvas.drawRect(w - radiusS, radiusTR, w + radiusS, h - radiusBR, borderPaint);
             //--------------------------------------------画弧形-------------------------------------
-            colors = new int[]{0, color & 0x01111111, color, color & 0x01111111};
+            int start = (color & 0xFF000000) == 0xFF000000 ? color : to;
+            colors = new int[]{start, start, color, to};
             //左上弧形
             float percent = (radiusTL - radiusS) / (radiusTL + radiusS);
             cornerPaint.setShader(new RadialGradient(radiusTL, radiusTL, radiusTL + radiusS,

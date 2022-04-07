@@ -17,7 +17,9 @@ import make.more.r2d2.round_corner.help.RoundAble;
  * Created by HeZX on 2019-07-15.
  */
 public abstract class ShadowHelper {
-
+    private final static int DEFAULT_COLOR = 0x66000000;
+    private final static int MODE_LAYER = 1;
+    private final static int MODE_SHADER = 2;
     ColorStateList shadowColor;
     float radiusS;
     float dX;
@@ -26,23 +28,26 @@ public abstract class ShadowHelper {
     Path path;
     RectF rect;
 
-    public void init(Context context, View view, AttributeSet attrs) {
+    public static ShadowHelper init(Context context, AttributeSet attrs) {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ShadowLayout);
-        if (array == null) return;
+        if (array == null) return null;
+        ShadowHelper helper;
         try {
-            radiusS = array.getDimension(R.styleable.ShadowLayout_shadow_radius, 0);
-            dX = array.getDimension(R.styleable.ShadowLayout_shadow_dx, 0);
-            dY = array.getDimension(R.styleable.ShadowLayout_shadow_dy, 0);
+            int mode = array.getInt(R.styleable.ShadowLayout_shadow_mode, MODE_LAYER);
+            helper = mode == MODE_SHADER ? new ShadowHelperShader() : new ShadowHelperLayer();
+            helper.radiusS = array.getDimension(R.styleable.ShadowLayout_shadow_radius, 0);
+            helper.dX = array.getDimension(R.styleable.ShadowLayout_shadow_dx, 0);
+            helper.dY = array.getDimension(R.styleable.ShadowLayout_shadow_dy, 0);
             if (array.hasValue(R.styleable.ShadowLayout_shadow_color))
-                shadowColor = array.getColorStateList(R.styleable.ShadowLayout_shadow_color);
-            else shadowColor = ColorStateList.valueOf(0x66000000);
-
+                helper.shadowColor = array.getColorStateList(R.styleable.ShadowLayout_shadow_color);
+            else helper.shadowColor = ColorStateList.valueOf(DEFAULT_COLOR);
         } finally {
             array.recycle();
         }
-        path = new Path();
-        rect = new RectF();
-        init();
+        helper.path = new Path();
+        helper.rect = new RectF();
+        helper.init();
+        return helper;
     }
 
     /*** 初始化 ***/

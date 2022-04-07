@@ -6,14 +6,14 @@ import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
 import make.more.r2d2.round_corner.shadow.ShadowAble;
-import make.more.r2d2.round_corner.shadow.ShadowHelperLayer;
+import make.more.r2d2.round_corner.shadow.ShadowHelper;
 
 /**
  * Created by HeZX on 2019-07-15.
  */
 public class ShadowRelative extends RelativeLayout implements ShadowAble {
 
-    ShadowHelperLayer helper = new ShadowHelperLayer();
+    ShadowHelper helper;
 
 
     public ShadowRelative(Context context) {
@@ -26,12 +26,12 @@ public class ShadowRelative extends RelativeLayout implements ShadowAble {
 
     public ShadowRelative(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        helper.init(context, this, attrs);
+        helper = ShadowHelper.init(context, attrs);
     }
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        helper.drawAllShadow(this, canvas, getDrawableState());
+        if (helper != null) helper.drawAllShadow(this, canvas, getDrawableState());
         super.dispatchDraw(canvas);
     }
 
@@ -41,7 +41,7 @@ public class ShadowRelative extends RelativeLayout implements ShadowAble {
         if (helper != null) helper.drawableStateChanged(this);
     }
 
-    public ShadowHelperLayer getShadowHelper() {
+    public ShadowHelper getShadowHelper() {
         return helper;
     }
 

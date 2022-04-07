@@ -7,14 +7,13 @@ import android.widget.FrameLayout;
 
 import make.more.r2d2.round_corner.shadow.ShadowAble;
 import make.more.r2d2.round_corner.shadow.ShadowHelper;
-import make.more.r2d2.round_corner.shadow.ShadowHelperShader;
 
 /**
  * Created by HeZX on 2019-07-15.
  */
 public class ShadowFrame extends FrameLayout implements ShadowAble {
 
-    ShadowHelper helper = new ShadowHelperShader();
+    ShadowHelper helper;
 
 
     public ShadowFrame(Context context) {
@@ -27,12 +26,12 @@ public class ShadowFrame extends FrameLayout implements ShadowAble {
 
     public ShadowFrame(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        helper.init(context, this, attrs);
+        helper = ShadowHelper.init(context, attrs);
     }
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        helper.drawAllShadow(this, canvas, getDrawableState());
+        if (helper != null) helper.drawAllShadow(this, canvas, getDrawableState());
         super.dispatchDraw(canvas);
     }
 

@@ -84,25 +84,55 @@
         app:round_stroke_color="@color/colorAccent"
         app:round_stroke_width="4dp" />
 
-    <make.more.r2d2.round_corner.ShadowFrame
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:padding="6dp"
-        app:shadow_color="@color/stateful"
-        app:shadow_dx="2dp"
-        app:shadow_dy="2dp"
-        app:shadow_radius="2dp">
+        android:orientation="horizontal">
 
-        <make.more.r2d2.round_corner.RoundView
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            app:round_bg="#8F8"
-            app:round_radius="20dp"
-            app:round_radius_bottom_left="4dp" />
+        <make.more.r2d2.round_corner.ShadowFrame
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:padding="16dp"
+            app:shadow_color="@color/stateful"
+            app:shadow_dx="4dp"
+            app:shadow_dy="4dp"
+            app:shadow_radius="8dp">
 
-    </make.more.r2d2.round_corner.ShadowFrame>
+            <make.more.r2d2.round_corner.RoundView
+                android:layout_width="90dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                app:round_bg="#68F8"
+                app:round_radius="20dp"
+                app:round_radius_bottom_left="8dp" />
 
+        </make.more.r2d2.round_corner.ShadowFrame>
+
+        <make.more.r2d2.round_corner.ShadowFrame
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:padding="16dp"
+            app:shadow_color="@color/stateful"
+            app:shadow_dx="4dp"
+            app:shadow_dy="4dp"
+            app:shadow_mode="shader"
+            app:shadow_radius="8dp">
+
+            <make.more.r2d2.round_corner.RoundView
+                android:layout_width="90dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                app:round_bg="#68F8"
+                app:round_radius="20dp"
+                app:round_radius_bottom_left="8dp" />
+
+        </make.more.r2d2.round_corner.ShadowFrame>
+
+    </LinearLayout>
 
     <make.more.r2d2.round_corner.RoundCheck
         android:layout_width="120dp"

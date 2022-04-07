@@ -211,12 +211,20 @@
     <!--阴影Y轴偏移-->
     <attr name="shadow_dy" format="dimension" />
 
+    <!-- 可圆角背景Tint模式 -->
+    <attr name="shadow_mode">
+        <!-- Shadow mode use setShadowLayer default -->
+        <enum name="layer" value="1" />
+        <!-- Shadow mode use setShader -->
+        <enum name="shader" value="2" />
+    </attr>
     <!--用来读取的属性-->
     <declare-styleable name="ShadowLayout">
         <attr name="shadow_color" />
         <attr name="shadow_radius" />
         <attr name="shadow_dx" />
         <attr name="shadow_dy" />
+        <attr name="shadow_mode" />
     </declare-styleable>
 
     <!--用来提示的属性-->
@@ -225,6 +233,7 @@
         <attr name="shadow_radius" />
         <attr name="shadow_dx" />
         <attr name="shadow_dy" />
+        <attr name="shadow_mode" />
     </declare-styleable>
     <!--用来提示的属性-->
     <declare-styleable name="ShadowLinear">
@@ -232,6 +241,7 @@
         <attr name="shadow_radius" />
         <attr name="shadow_dx" />
         <attr name="shadow_dy" />
+        <attr name="shadow_mode" />
     </declare-styleable>
     <!--用来提示的属性-->
     <declare-styleable name="ShadowRelative">
@@ -239,5 +249,6 @@
         <attr name="shadow_radius" />
         <attr name="shadow_dx" />
         <attr name="shadow_dy" />
+        <attr name="shadow_mode" />
     </declare-styleable>
 </resources>

@@ -11,9 +11,12 @@ import make.more.r2d2.round_corner.help.RoundAble;
  * Created by HeZX on 2019-07-15.
  * 采用 setShadowLayer 方法，需要关闭硬件加速
  */
-public class ShadowHelperLayer extends ShadowHelper {
+class ShadowHelperLayer extends ShadowHelper {
 
     private Paint shadowPaint;
+
+    ShadowHelperLayer() {
+    }
 
     @Override
     void init() {
@@ -24,10 +27,10 @@ public class ShadowHelperLayer extends ShadowHelper {
     @Override
     void drawShadow(Canvas canvas, View roundView, RoundAble roundAble, int[] drawableState) {
         float[] radii = roundAble.getRoundHelper().getRadii();
-        float top = radiusS;
-        float bottom = radiusS + roundView.getHeight();
-        float left = radiusS;
-        float right = radiusS + roundView.getWidth();
+        float top = 0;
+        float bottom = roundView.getHeight();
+        float left = 0;
+        float right = roundView.getWidth();
 
         float radiusTopLeft = radii[0];
         float radiusTopRight = radii[2];
