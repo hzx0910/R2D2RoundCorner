@@ -12,14 +12,13 @@ allprojects {
 }
 ```
 
-**Step 2. Add the dependency**
+**Step 2. Add the dependency** [![](https://www.jitpack.io/v/hzx0910/R2D2RoundCorner.svg)](https://www.jitpack.io/#hzx0910/R2D2RoundCorner)
 ```groovy
 
 dependencies {
         implementation 'com.github.hzx0910:R2D2RoundCorner:1.0.4'
 }
 ```
-[![](https://www.jitpack.io/v/hzx0910/R2D2RoundCorner.svg)](https://www.jitpack.io/#hzx0910/R2D2RoundCorner)
 
 **Step 3. Set each corner/shadow in your layout.xml**
 
