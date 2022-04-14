@@ -34,6 +34,8 @@ public class RoundHelper {
     private ColorStateList bg_tint;        // 背景tint颜色列表
     private PorterDuff.Mode bg_tint_mode;  // 背景tint模式
 
+    boolean forceClip;
+
     private RectF layer = new RectF();                  // 画布图层大小
     private RectF tempRectF;                            // 临时矩形 onDraw中避免 new 新对象
     private Path clipPath = new Path();                 // 剪裁区域
@@ -73,6 +75,9 @@ public class RoundHelper {
         int radiusTopRight = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_top_right, radiusRight > 0 ? radiusRight : radiusTop);
         int radiusBottomRight = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom_right, radiusRight > 0 ? radiusRight : radiusBottom);
         int radiusBottomLeft = array.getDimensionPixelSize(R.styleable.RoundLayout_round_radius_bottom_left, radiusLeft > 0 ? radiusLeft : radiusBottom);
+
+        forceClip = array.getBoolean(R.styleable.RoundLayout_round_force_clip, false);
+
         array.recycle();
 
         setRadius(radiusTopLeft, radiusTopRight, radiusBottomRight, radiusBottomLeft);
@@ -92,7 +97,7 @@ public class RoundHelper {
      * @return 是否需要裁剪内容
      */
     private boolean clipMode() {
-        return bg_drawable != null;
+        return bg_drawable != null || forceClip;
     }
 
     @SuppressWarnings("unused")
@@ -339,5 +344,15 @@ public class RoundHelper {
 
     public void setBgTintMode(PorterDuff.Mode bg_tint_mode) {
         this.bg_tint_mode = bg_tint_mode;
+    }
+
+    public boolean isForceClip() {
+        return forceClip;
+    }
+
+    public void setForceClip(boolean forceClip) {
+        this.forceClip = forceClip;
+        if (forceClip && reference.get() != null)
+            reference.get().setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 }

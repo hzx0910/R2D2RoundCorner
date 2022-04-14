@@ -26,6 +26,7 @@ public class RoundImage extends ImageView implements RoundAble {
     public RoundImage(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         helper.init(context, this, attrs);
+        helper.setForceClip(true);
     }
 
     @Override

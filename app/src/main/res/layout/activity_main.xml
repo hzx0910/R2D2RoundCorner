@@ -14,7 +14,7 @@
         android:layout_height="100dp"
         android:clickable="true"
         android:focusable="true"
-        app:round_bg="@mipmap/android"
+        android:src="@mipmap/android"
         app:round_bg_tint="@color/stateful"
         app:round_bg_tint_mode="add"
         app:round_radius="50dp"

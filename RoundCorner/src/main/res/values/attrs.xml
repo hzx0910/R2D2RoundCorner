@@ -38,6 +38,8 @@
     <attr name="round_stroke_width" format="dimension" />
     <!-- 边框颜色 -->
     <attr name="round_stroke_color" format="color" />
+    <!-- 强制裁剪 -->
+    <attr name="round_force_clip" format="boolean" />
 
     <!--用来读取的属性-->
     <declare-styleable name="RoundLayout">
@@ -55,6 +57,7 @@
         <attr name="round_radius_bottom_right" />
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
+        <attr name="round_force_clip" />
     </declare-styleable>
 
     <!--用来提示的属性-->
@@ -73,6 +76,7 @@
         <attr name="round_radius_bottom_right" />
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
+        <attr name="round_force_clip" />
     </declare-styleable>
 
     <!--用来提示的属性-->
@@ -91,6 +95,7 @@
         <attr name="round_radius_bottom_right" />
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
+        <attr name="round_force_clip" />
     </declare-styleable>
 
     <!--用来提示的属性-->
@@ -109,6 +114,7 @@
         <attr name="round_radius_bottom_right" />
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
+        <attr name="round_force_clip" />
     </declare-styleable>
 
     <!--用来提示的属性-->
@@ -127,6 +133,7 @@
         <attr name="round_radius_bottom_right" />
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
+        <attr name="round_force_clip" />
     </declare-styleable>
 
     <!--用来提示的属性-->
@@ -145,6 +152,7 @@
         <attr name="round_radius_bottom_right" />
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
+        <attr name="round_force_clip" />
     </declare-styleable>
 
     <!--用来提示的属性-->
@@ -163,6 +171,7 @@
         <attr name="round_radius_bottom_right" />
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
+        <attr name="round_force_clip" />
     </declare-styleable>
 
     <!--用来提示的属性-->
@@ -181,6 +190,7 @@
         <attr name="round_radius_bottom_right" />
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
+        <attr name="round_force_clip" />
     </declare-styleable>
 
     <!--用来提示的属性-->
@@ -199,6 +209,7 @@
         <attr name="round_radius_bottom_right" />
         <attr name="round_stroke_width" />
         <attr name="round_stroke_color" />
+        <attr name="round_force_clip" />
     </declare-styleable>
 
     <!--              阴影布局参数区                -->
