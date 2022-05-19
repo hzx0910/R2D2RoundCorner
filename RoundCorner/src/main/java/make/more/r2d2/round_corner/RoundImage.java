@@ -38,7 +38,11 @@ public class RoundImage extends ImageView implements RoundAble {
     @Override
     protected void onDraw(Canvas canvas) {
         helper.drawBG(canvas, getDrawableState());
-        super.onDraw(canvas);
+        if(getDrawable() != null){
+            helper.drawRoundBitmap(canvas, getDrawable());
+        }else {
+            super.onDraw(canvas);
+        }
         helper.drawClip(canvas, getDrawableState());
     }
 
