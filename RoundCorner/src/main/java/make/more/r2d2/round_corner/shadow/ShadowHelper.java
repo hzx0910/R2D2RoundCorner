@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,11 @@ public abstract class ShadowHelper {
         ShadowHelper helper;
         try {
             int mode = array.getInt(R.styleable.ShadowLayout_shadow_mode, MODE_LAYER);
-            helper = mode == MODE_SHADER ? new ShadowHelperShader() : new ShadowHelperLayer();
+            if(Build.VERSION.SDK_INT < 28){
+                helper = new ShadowHelperShader();
+            }else {
+                helper = mode == MODE_SHADER ? new ShadowHelperShader() : new ShadowHelperLayer();
+            }
             helper.radiusS = array.getDimension(R.styleable.ShadowLayout_shadow_radius, 0);
             helper.dX = array.getDimension(R.styleable.ShadowLayout_shadow_dx, 0);
             helper.dY = array.getDimension(R.styleable.ShadowLayout_shadow_dy, 0);
