@@ -154,8 +154,8 @@ public class RoundHelper {
             }
         } else {
             if (bg_tint == null) {
-                drawRoundBitmap(canvas, bg_drawable);
-            } else {
+                drawRoundBitmap(canvas, bg_drawable, drawableState);
+            } else if(bg_drawable != null){
                 bg_drawable.setState(drawableState);
                 bg_drawable.setBounds(0, 0, (int) layer.width(), (int) layer.height());
                 bg_drawable.draw(canvas);
@@ -173,7 +173,7 @@ public class RoundHelper {
      * @param canvas
      * @param drawable
      */
-    public void drawRoundBitmap(Canvas canvas, Drawable drawable){
+    public void drawRoundBitmap(Canvas canvas, Drawable drawable, int[] drawableState){
         Bitmap bitmap = drawableToBitmap(drawable);
         if(bitmap == null){
             return;
@@ -197,6 +197,16 @@ public class RoundHelper {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
         tempPath.addRoundRect(tempRectF, radii, Path.Direction.CCW);
         canvas.drawPath(tempPath, paint);
+
+        if(bg_tint != null){
+            drawable.setState(drawableState);
+            drawable.setBounds(0, 0, (int) layer.width(), (int) layer.height());
+            drawable.draw(canvas);
+            paint.setColor(bg_tint.getColorForState(drawableState, bg_tint.getDefaultColor()));
+            paint.setStyle(Paint.Style.FILL);
+            paint.setXfermode(mode_bg_tint);
+            canvas.drawRect(0, 0, (int) layer.width(), (int) layer.height(), paint);
+        }
     }
 
     /**
