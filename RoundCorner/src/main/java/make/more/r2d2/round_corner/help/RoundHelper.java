@@ -29,6 +29,7 @@ import make.more.r2d2.round_corner.R;
  * Created by HeZX on 2019-06-19.
  */
 public class RoundHelper {
+    private static final String TAG = RoundHelper.class.getSimpleName();
 
     private float[] radii = new float[8];  // top-left, top-right, bottom-right, bottom-left
     private Paint paint;                   // 画笔
@@ -39,9 +40,14 @@ public class RoundHelper {
     private ColorStateList bg_tint;        // 背景tint颜色列表
     private PorterDuff.Mode bg_tint_mode;  // 背景tint模式
 
-    boolean forceClip;
+    boolean forceClip;                     // 是否强制剪裁
 
-    private Matrix mMatrix;
+    private Bitmap tempBitmap;                          // 剪裁bitmap
+    private int bitmapWidth;                            // 剪裁bitmap宽度
+    private int bitmapHeight;                           // 剪裁bitmap高度
+    private Matrix mMatrix;                             // 缩放矩阵
+    private float mMatrixScaleX;                        // 缩放矩阵宽度
+    private float mMatrixScaleY;                        // 缩放矩阵高度
     private RectF layer = new RectF();                  // 画布图层大小
     private RectF tempRectF;                            // 临时矩形 onDraw中避免 new 新对象
     private Path clipPath = new Path();                 // 剪裁区域
@@ -55,6 +61,7 @@ public class RoundHelper {
     PaintFlagsDrawFilter filter = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
 
     public void init(Context context, View view, AttributeSet attrs) {
+        BitmapLruCacheUtil.getInstance().init();
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RoundLayout);
         if (array == null) return;
         strokeColor = array.getColorStateList(R.styleable.RoundLayout_round_stroke_color);
@@ -174,24 +181,24 @@ public class RoundHelper {
      * @param drawable
      */
     public void drawRoundBitmap(Canvas canvas, Drawable drawable, int[] drawableState){
-        Bitmap bitmap = drawableToBitmap(drawable);
-        if(bitmap == null){
+        tempBitmap = drawableToBitmap(drawable);
+
+        if(tempBitmap == null){
             return;
         }
         tempPath.reset();
         tempRectF.set(strokeWidth / 2f, strokeWidth / 2f,
                 layer.right - strokeWidth / 2f, layer.bottom - strokeWidth / 2f);
-        float scaleX = 1.0f;
-        float scaleY = 1.0f;
-        if (!(bitmap.getWidth() == layer.width() && bitmap.getHeight() == layer.height()))
+
+        if (!(tempBitmap.getWidth() == layer.width() && tempBitmap.getHeight() == layer.height()))
         {
             // 等比例缩放图片大小
-            scaleX = layer.width() / bitmap.getWidth();
-            scaleY = layer.height() / bitmap.getHeight();
+            mMatrixScaleX = layer.width() / tempBitmap.getWidth();
+            mMatrixScaleY = layer.height() / tempBitmap.getHeight();
         }
-        mMatrix.setScale(scaleX, scaleY);
+        mMatrix.setScale(mMatrixScaleX, mMatrixScaleY);
 
-        BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        BitmapShader shader = new BitmapShader(tempBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         shader.setLocalMatrix(mMatrix);
         paint.setShader(shader);
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
@@ -219,18 +226,31 @@ public class RoundHelper {
             return null;
         }
         if (drawable instanceof BitmapDrawable) {
+            tempBitmap = BitmapLruCacheUtil.getInstance().getBitmapFromLruCache(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
+            if(tempBitmap != null){
+                return tempBitmap;
+            }
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            return bitmapDrawable.getBitmap();
+            tempBitmap = bitmapDrawable.getBitmap();
+            bitmapWidth = tempBitmap.getWidth();
+            bitmapHeight = tempBitmap.getHeight();
+            Bitmap.Config config = tempBitmap.getConfig();
+            BitmapLruCacheUtil.getInstance().putBitmapToLruCache(bitmapWidth, bitmapHeight, config, tempBitmap);
+            return tempBitmap;
         }
 
-        int w = drawable.getIntrinsicWidth() <= 0 ? (int) layer.width() : drawable.getIntrinsicWidth();
-        int h = drawable.getIntrinsicWidth() <= 0 ? (int) layer.height() : drawable.getIntrinsicHeight();
+        bitmapWidth = drawable.getIntrinsicWidth() <= 0 ? (int) layer.width() : drawable.getIntrinsicWidth();
+        bitmapHeight = drawable.getIntrinsicWidth() <= 0 ? (int) layer.height() : drawable.getIntrinsicHeight();
+        tempBitmap = BitmapLruCacheUtil.getInstance().getBitmapFromLruCache(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
 
-        Bitmap bitmap = Bitmap.createBitmap((int)w, (int)h, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, w, h);
+        if(tempBitmap == null){
+            tempBitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
+            BitmapLruCacheUtil.getInstance().putBitmapToLruCache(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888, tempBitmap);
+        }
+        Canvas canvas = new Canvas(tempBitmap);
+        drawable.setBounds(0, 0, bitmapWidth, bitmapHeight);
         drawable.draw(canvas);
-        return bitmap;
+        return tempBitmap;
     }
 
 
