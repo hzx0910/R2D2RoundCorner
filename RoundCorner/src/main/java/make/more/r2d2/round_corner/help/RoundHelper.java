@@ -3,14 +3,19 @@ package make.more.r2d2.round_corner.help;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -24,6 +29,7 @@ import make.more.r2d2.round_corner.R;
  * Created by HeZX on 2019-06-19.
  */
 public class RoundHelper {
+    private static final String TAG = RoundHelper.class.getSimpleName();
 
     private float[] radii = new float[8];  // top-left, top-right, bottom-right, bottom-left
     private Paint paint;                   // 画笔
@@ -34,8 +40,14 @@ public class RoundHelper {
     private ColorStateList bg_tint;        // 背景tint颜色列表
     private PorterDuff.Mode bg_tint_mode;  // 背景tint模式
 
-    boolean forceClip;
+    boolean forceClip;                     // 是否强制剪裁
 
+    private Bitmap tempBitmap;                          // 剪裁bitmap
+    private int bitmapWidth;                            // 剪裁bitmap宽度
+    private int bitmapHeight;                           // 剪裁bitmap高度
+    private Matrix mMatrix;                             // 缩放矩阵
+    private float mMatrixScaleX;                        // 缩放矩阵宽度
+    private float mMatrixScaleY;                        // 缩放矩阵高度
     private RectF layer = new RectF();                  // 画布图层大小
     private RectF tempRectF;                            // 临时矩形 onDraw中避免 new 新对象
     private Path clipPath = new Path();                 // 剪裁区域
@@ -49,6 +61,7 @@ public class RoundHelper {
     PaintFlagsDrawFilter filter = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
 
     public void init(Context context, View view, AttributeSet attrs) {
+        BitmapLruCacheUtil.getInstance().init();
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RoundLayout);
         if (array == null) return;
         strokeColor = array.getColorStateList(R.styleable.RoundLayout_round_stroke_color);
@@ -83,6 +96,7 @@ public class RoundHelper {
         setRadius(radiusTopLeft, radiusTopRight, radiusBottomRight, radiusBottomLeft);
         if (bg_drawable != null && bg_tint != null)
             mode_bg_tint = new PorterDuffXfermode(bg_tint_mode);
+        mMatrix = new Matrix();
         paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setAntiAlias(true);
@@ -129,7 +143,7 @@ public class RoundHelper {
 
     public void drawBG(Canvas canvas, int[] drawableState) {
         canvas.setDrawFilter(filter);
-        if (!clipMode()) {
+        if (!clipMode() || bg_color != null) {
             tempRectF.set(strokeWidth / 2f, strokeWidth / 2f,
                     layer.right - strokeWidth / 2f, layer.bottom - strokeWidth / 2f);
             tempPath.reset();
@@ -146,22 +160,99 @@ public class RoundHelper {
                 canvas.drawPath(tempPath, paint);
             }
         } else {
-            if (bg_color != null) {
-                canvas.drawColor(bg_color.getColorForState(drawableState, bg_color.getDefaultColor()));
-            }
-            if (bg_drawable != null) {
+            if (bg_tint == null) {
+                drawRoundBitmap(canvas, bg_drawable, drawableState);
+            } else if(bg_drawable != null){
                 bg_drawable.setState(drawableState);
                 bg_drawable.setBounds(0, 0, (int) layer.width(), (int) layer.height());
                 bg_drawable.draw(canvas);
-                if (bg_tint != null) {
-                    paint.setColor(bg_tint.getColorForState(drawableState, bg_tint.getDefaultColor()));
-                    paint.setStyle(Paint.Style.FILL);
-                    paint.setXfermode(mode_bg_tint);
-                    canvas.drawRect(0, 0, (int) layer.width(), (int) layer.height(), paint);
-                }
+                paint.setColor(bg_tint.getColorForState(drawableState, bg_tint.getDefaultColor()));
+                paint.setStyle(Paint.Style.FILL);
+                paint.setXfermode(mode_bg_tint);
+                canvas.drawRect(0, 0, (int) layer.width(), (int) layer.height(), paint);
+                canvas.drawPath(tempPath, paint);
             }
         }
     }
+
+    /**
+     * 绘制圆角bitmap ,参照TransformationUtils.roundedCorners()
+     * @param canvas
+     * @param drawable
+     */
+    public void drawRoundBitmap(Canvas canvas, Drawable drawable, int[] drawableState){
+        tempBitmap = drawableToBitmap(drawable);
+
+        if(tempBitmap == null){
+            return;
+        }
+        tempPath.reset();
+        tempRectF.set(strokeWidth / 2f, strokeWidth / 2f,
+                layer.right - strokeWidth / 2f, layer.bottom - strokeWidth / 2f);
+
+        if (!(tempBitmap.getWidth() == layer.width() && tempBitmap.getHeight() == layer.height()))
+        {
+            // 等比例缩放图片大小
+            mMatrixScaleX = layer.width() / tempBitmap.getWidth();
+            mMatrixScaleY = layer.height() / tempBitmap.getHeight();
+        }
+        mMatrix.setScale(mMatrixScaleX, mMatrixScaleY);
+
+        BitmapShader shader = new BitmapShader(tempBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        shader.setLocalMatrix(mMatrix);
+        paint.setShader(shader);
+        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        tempPath.addRoundRect(tempRectF, radii, Path.Direction.CCW);
+        canvas.drawPath(tempPath, paint);
+
+        if(bg_tint != null){
+            drawable.setState(drawableState);
+            drawable.setBounds(0, 0, (int) layer.width(), (int) layer.height());
+            drawable.draw(canvas);
+            paint.setColor(bg_tint.getColorForState(drawableState, bg_tint.getDefaultColor()));
+            paint.setStyle(Paint.Style.FILL);
+            paint.setXfermode(mode_bg_tint);
+            canvas.drawRect(0, 0, (int) layer.width(), (int) layer.height(), paint);
+        }
+    }
+
+    /**
+     * drawble 转 bitmap
+     * @param drawable
+     * @return
+     */
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        if(drawable == null){
+            return null;
+        }
+        if (drawable instanceof BitmapDrawable) {
+            tempBitmap = BitmapLruCacheUtil.getInstance().getBitmapFromLruCache(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
+            if(tempBitmap != null){
+                return tempBitmap;
+            }
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            tempBitmap = bitmapDrawable.getBitmap();
+            bitmapWidth = tempBitmap.getWidth();
+            bitmapHeight = tempBitmap.getHeight();
+            Bitmap.Config config = tempBitmap.getConfig();
+            BitmapLruCacheUtil.getInstance().putBitmapToLruCache(bitmapWidth, bitmapHeight, config, tempBitmap);
+            return tempBitmap;
+        }
+
+        bitmapWidth = drawable.getIntrinsicWidth() <= 0 ? (int) layer.width() : drawable.getIntrinsicWidth();
+        bitmapHeight = drawable.getIntrinsicWidth() <= 0 ? (int) layer.height() : drawable.getIntrinsicHeight();
+        tempBitmap = BitmapLruCacheUtil.getInstance().getBitmapFromLruCache(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
+
+        if(tempBitmap == null){
+            tempBitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
+            BitmapLruCacheUtil.getInstance().putBitmapToLruCache(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888, tempBitmap);
+        }
+        Canvas canvas = new Canvas(tempBitmap);
+        drawable.setBounds(0, 0, bitmapWidth, bitmapHeight);
+        drawable.draw(canvas);
+        return tempBitmap;
+    }
+
 
     public void drawClip(Canvas canvas, int[] drawableState) {
         if (!clipMode()) return;
