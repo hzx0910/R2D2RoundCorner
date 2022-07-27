@@ -228,6 +228,9 @@ public class RoundHelper {
         if (drawable instanceof BitmapDrawable) {
             tempBitmap = BitmapLruCacheUtil.getInstance().getBitmapFromLruCache(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
             if(tempBitmap != null){
+                Canvas canvas = new Canvas(tempBitmap);
+                drawable.setBounds(0, 0, bitmapWidth, bitmapHeight);
+                drawable.draw(canvas);
                 return tempBitmap;
             }
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
@@ -235,7 +238,11 @@ public class RoundHelper {
             bitmapWidth = tempBitmap.getWidth();
             bitmapHeight = tempBitmap.getHeight();
             Bitmap.Config config = tempBitmap.getConfig();
+            tempBitmap = tempBitmap.copy(config,true);
             BitmapLruCacheUtil.getInstance().putBitmapToLruCache(bitmapWidth, bitmapHeight, config, tempBitmap);
+            Canvas canvas = new Canvas(tempBitmap);
+            drawable.setBounds(0, 0, bitmapWidth, bitmapHeight);
+            drawable.draw(canvas);
             return tempBitmap;
         }
 
