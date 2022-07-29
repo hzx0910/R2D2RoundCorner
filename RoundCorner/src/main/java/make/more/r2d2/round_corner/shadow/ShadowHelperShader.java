@@ -19,6 +19,7 @@ class ShadowHelperShader extends ShadowHelper {
     private Paint centerPaint;
     private Paint borderPaint;
     private Paint cornerPaint;
+    private ShadowHelperShaderModel shaderModel;
 
     ShadowHelperShader() {
     }
@@ -32,6 +33,7 @@ class ShadowHelperShader extends ShadowHelper {
         borderPaint.setAntiAlias(false);
         cornerPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         cornerPaint.setAntiAlias(false);
+        shaderModel = new ShadowHelperShaderModel();
     }
 
     @Override
@@ -80,45 +82,90 @@ class ShadowHelperShader extends ShadowHelper {
             //必须有透明度才能画出阴影 故alpha最小设置0x01
             int to = color & 0x00FFFFFF;
             int[] colors = new int[]{color, to};
+            int start = (color & 0xFF000000) == 0xFF000000 ? color : to;
+
+            if(isNeedUpdate(view, shaderModel)){
+                //上方渐变
+                shaderModel.getShadersList().add(new LinearGradient(0, +radiusS, 0, -radiusS,
+                        colors, null, Shader.TileMode.CLAMP));
+                //下方渐变
+                shaderModel.getShadersList().add(new LinearGradient(0, h - radiusS, 0, h + radiusS,
+                        colors, null, Shader.TileMode.CLAMP));
+                //左边渐变
+                shaderModel.getShadersList().add(new LinearGradient(+radiusS, 0, -radiusS, 0,
+                        colors, null, Shader.TileMode.CLAMP));
+                //右边渐变
+                shaderModel.getShadersList().add(new LinearGradient(w - radiusS, 0, w + radiusS, 0,
+                        colors, null, Shader.TileMode.CLAMP));
+
+                //--------------------------------------------画弧形-------------------------------------
+                colors = new int[]{start, start, color, to};
+                //左上弧形
+                float percent = (radiusTL - radiusS) / (radiusTL + radiusS);
+                shaderModel.getShadersList().add(new RadialGradient(radiusTL, radiusTL, radiusTL + radiusS,
+                        colors, new float[]{0f, percent, percent, 1f}, Shader.TileMode.CLAMP));
+                //右上弧形
+                percent = (radiusTR - radiusS) / (radiusTR + radiusS);
+                shaderModel.getShadersList().add(new RadialGradient(w - radiusTR, radiusTR, radiusTR + radiusS,
+                        colors, new float[]{0f, percent, percent, 1f}, Shader.TileMode.CLAMP));
+                //左下弧形
+                percent = (radiusBL - radiusS) / (radiusBL + radiusS);
+                shaderModel.getShadersList().add(new RadialGradient(radiusBL, h - radiusBL, radiusBL + radiusS,
+                        colors, new float[]{0f, percent, percent, 1f}, Shader.TileMode.CLAMP));
+                //右下弧形
+                percent = (radiusBR - radiusS) / (radiusBR + radiusS);
+                shaderModel.getShadersList().add(new RadialGradient(w - radiusBR, h - radiusBR, radiusBR + radiusS,
+                        colors, new float[]{0f, percent, percent, 1f}, Shader.TileMode.CLAMP));
+
+                //更新后将数据放入缓存
+                shaderModel.setRadii(radii);
+                shaderModel.setColor(color);
+                shaderModel.setHeight(h);
+                shaderModel.setWidth(w);
+                shaderModel.setRadiusS(radiusS);
+                view.setTag(shaderModel);
+            }
+            if(view.getTag() == null || !(view.getTag() instanceof ShadowHelperShaderModel)){
+                return;
+            }
             //上方渐变
-            borderPaint.setShader(new LinearGradient(0, +radiusS, 0, -radiusS,
-                    colors, null, Shader.TileMode.CLAMP));
+            borderPaint.setShader(shaderModel.getShadersList().get(0));
             canvas.drawRect(radiusTL, -radiusS, w - radiusTR, +radiusS, borderPaint);
             //下方渐变
-            borderPaint.setShader(new LinearGradient(0, h - radiusS, 0, h + radiusS,
-                    colors, null, Shader.TileMode.CLAMP));
+            borderPaint.setShader(shaderModel.getShadersList().get(1));
             canvas.drawRect(radiusBL, h - radiusS, w - radiusBR, h + radiusS, borderPaint);
             //左边渐变
-            borderPaint.setShader(new LinearGradient(+radiusS, 0, -radiusS, 0,
-                    colors, null, Shader.TileMode.CLAMP));
+            borderPaint.setShader(shaderModel.getShadersList().get(2));
             canvas.drawRect(-radiusS, radiusTL, +radiusS, h - radiusBL, borderPaint);
             //右边渐变
-            borderPaint.setShader(new LinearGradient(w - radiusS, 0, w + radiusS, 0,
-                    colors, null, Shader.TileMode.CLAMP));
+            borderPaint.setShader(shaderModel.getShadersList().get(3));
             canvas.drawRect(w - radiusS, radiusTR, w + radiusS, h - radiusBR, borderPaint);
-            //--------------------------------------------画弧形-------------------------------------
-            int start = (color & 0xFF000000) == 0xFF000000 ? color : to;
-            colors = new int[]{start, start, color, to};
+
             //左上弧形
-            float percent = (radiusTL - radiusS) / (radiusTL + radiusS);
-            cornerPaint.setShader(new RadialGradient(radiusTL, radiusTL, radiusTL + radiusS,
-                    colors, new float[]{0f, percent, percent, 1f}, Shader.TileMode.CLAMP));
+            cornerPaint.setShader(shaderModel.getShadersList().get(4));
             canvas.drawRect(-radiusS, -radiusS, radiusTL, radiusTL, cornerPaint);
             //右上弧形
-            percent = (radiusTR - radiusS) / (radiusTR + radiusS);
-            cornerPaint.setShader(new RadialGradient(w - radiusTR, radiusTR, radiusTR + radiusS,
-                    colors, new float[]{0f, percent, percent, 1f}, Shader.TileMode.CLAMP));
+            cornerPaint.setShader(shaderModel.getShadersList().get(5));
             canvas.drawRect(w - radiusTR, -radiusS, w + radiusS, radiusTR, cornerPaint);
             //左下弧形
-            percent = (radiusBL - radiusS) / (radiusBL + radiusS);
-            cornerPaint.setShader(new RadialGradient(radiusBL, h - radiusBL, radiusBL + radiusS,
-                    colors, new float[]{0f, percent, percent, 1f}, Shader.TileMode.CLAMP));
+            cornerPaint.setShader(shaderModel.getShadersList().get(6));
             canvas.drawRect(-radiusS, h - radiusBL, radiusBL, h + radiusS, cornerPaint);
             //右下弧形
-            percent = (radiusBR - radiusS) / (radiusBR + radiusS);
-            cornerPaint.setShader(new RadialGradient(w - radiusBR, h - radiusBR, radiusBR + radiusS,
-                    colors, new float[]{0f, percent, percent, 1f}, Shader.TileMode.CLAMP));
+            cornerPaint.setShader(shaderModel.getShadersList().get(7));
             canvas.drawRect(w - radiusBR, h - radiusBR, w + radiusS, h + radiusS, cornerPaint);
         }
+    }
+
+    /**
+     * 是否需要更新缓存
+     * @param view
+     * @param shaderModel
+     * @return
+     */
+    private boolean isNeedUpdate(View view, ShadowHelperShaderModel shaderModel){
+        if(view.getTag() != null && view.getTag() instanceof ShadowHelperShaderModel){
+            return !((ShadowHelperShaderModel)view.getTag()).equals(shaderModel);
+        }
+        return true;
     }
 }
