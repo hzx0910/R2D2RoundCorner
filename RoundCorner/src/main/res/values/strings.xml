@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">round-corner</string>
+
+    <item type="id" name="tag_shadowHelperShader" />\
 </resources>

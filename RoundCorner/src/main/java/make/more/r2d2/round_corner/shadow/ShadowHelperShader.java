@@ -8,6 +8,7 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.view.View;
 
+import make.more.r2d2.round_corner.R;
 import make.more.r2d2.round_corner.help.RoundAble;
 
 /**
@@ -123,11 +124,14 @@ class ShadowHelperShader extends ShadowHelper {
                 shaderModel.setHeight(h);
                 shaderModel.setWidth(w);
                 shaderModel.setRadiusS(radiusS);
-                view.setTag(shaderModel);
+                view.setTag(R.id.tag_shadowHelperShader, shaderModel);
             }
-            if(view.getTag() == null || !(view.getTag() instanceof ShadowHelperShaderModel)){
+            if(view.getTag(R.id.tag_shadowHelperShader) == null
+                    || !(view.getTag(R.id.tag_shadowHelperShader) instanceof ShadowHelperShaderModel)){
                 return;
             }
+            //首先从缓存中取出
+            shaderModel = (ShadowHelperShaderModel) view.getTag(R.id.tag_shadowHelperShader);
             //上方渐变
             borderPaint.setShader(shaderModel.getShadersList().get(0));
             canvas.drawRect(radiusTL, -radiusS, w - radiusTR, +radiusS, borderPaint);
@@ -163,8 +167,9 @@ class ShadowHelperShader extends ShadowHelper {
      * @return
      */
     private boolean isNeedUpdate(View view, ShadowHelperShaderModel shaderModel){
-        if(view.getTag() != null && view.getTag() instanceof ShadowHelperShaderModel){
-            return !((ShadowHelperShaderModel)view.getTag()).equals(shaderModel);
+        if(view.getTag(R.id.tag_shadowHelperShader) != null
+                && view.getTag(R.id.tag_shadowHelperShader) instanceof ShadowHelperShaderModel){
+            return !((ShadowHelperShaderModel)view.getTag(R.id.tag_shadowHelperShader)).equals(shaderModel);
         }
         return true;
     }
